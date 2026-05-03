@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<h2>{{ professor.name }} {{ professor.surname }}</h2>
+
+<p>Total income: {{ professor.total_income }}</p>
+<p>Professor rate: {{ professor.professor_rate }}</p>
+<p>School profit: {{ professor.school_rate }}</p>
+
+<h3>Students:</h3>
+
+{% for student in students.values %}
     <p>
-        {{ professor.name }}
-        {{ students }}
+        {{ student.name }} {{ student.surname }} —
+        {{ student.total_income_from_student }}
     </p>
-</body>
-</html>
+{% endfor %}

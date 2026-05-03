@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <p>
-        {{ student }}
-        {{ student.professor }}
-    </p>
-    {% for course in student.students_courses.all %}
-            <p>{{ course.course_name }}</p>
-    {% endfor %}
-</body>
-</html>
+<p>{{ student.name }} {{ student.surname }}</p>
+<p>Professor: {{ student.professor }}</p>
+
+<p>Courses:</p>
+{% for course in courses %}
+    <p>- {{ course.course_name }}</p>
+{% endfor %}
+
+<p>Total income: {{ total_income }}</p>
+<p>Professor rate: {{ professor_rate }}</p>
+<p>School profit: {{ school_rate }}</p>
