@@ -12,6 +12,11 @@ def view_student(request, pk):
     return render(request, 'analytics/view_student.html', {'student': student})
 
 
+def view_professors(request):
+    professors = Professor.objects.all()
+    return render(request, 'analytics/view_professors.html', {'professors': professors})
+
+
 def view_professor(request, pk):
     professor = get_object_or_404(Professor, pk=pk)
     students = professor.professor_students.all()
