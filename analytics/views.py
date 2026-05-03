@@ -41,3 +41,23 @@ def view_school_profit(request):
     }
 
     return render(request, 'analytics/view_school_profit.html', context)
+
+
+def create_student(request):
+    return render(request, 'analytics/student_form.html')
+
+
+def update_student(request, pk):
+    return render(request, 'analytics/student_form.html')
+
+
+def delete_student(request, pk):
+    return render(request, 'analytics/homepage.html')
+
+
+def create_professor(request):
+    return render(request, 'analytics/professor_form.html')
+
+
+def export_students_excel(request):
+    return render(request, 'analytics/homepage.html')
