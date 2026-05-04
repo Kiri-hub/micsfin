@@ -1,5 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+
+
 from .models import Student, Professor
+from .forms import ProfessorForm
 
 
 def homepage(request):
@@ -138,7 +141,14 @@ def delete_student(request, pk):
 
 
 def create_professor(request):
-    return render(request, 'analytics/professor_form.html')
+    if request.method == 'POST':
+        form = ProfessorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('homepage'))
+    form = ProfessorForm()
+    return render(request, 'analytics/professor_form.html', {'form': form})
+
 
 
 def export_students_excel(request):
