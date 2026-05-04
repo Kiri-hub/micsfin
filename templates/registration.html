@@ -1,9 +1,41 @@
 {% extends "analytics/base.html" %}
 {% load bootstrap5 %}
 {% block content %}
-    <form method="POST">
+
+<section class="container-fluid mt-5 mb-4" style="min-height: 80vh;">
+
+    <form method="post" class="form-card p-4">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        <button type="submit" class="btn btn-primary">Login</button>
+
+        <h3 class="mb-4 text-center form-title">Login</h3>
+
+        <!-- Username -->
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            {{ form.username }}
+        </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+            <label class="form-label">Password</label>
+            {{ form.password }}
+        </div>
+
+        <!-- Button -->
+        <div class="d-grid">
+            <button type="submit" class="btn button-accent btn-lg">
+                Login
+            </button>
+        </div>
+
+        <!-- Error -->
+        {% if form.errors %}
+            <div class="text-danger mt-3 text-center">
+                Invalid username or password
+            </div>
+        {% endif %}
     </form>
+
+</section>
+
 {% endblock %}

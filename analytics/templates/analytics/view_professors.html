@@ -1,18 +1,24 @@
 {% extends "analytics/base.html" %}
-
+{% load static %}
 {% block title %}Homepage - MICS{% endblock %}
-
 {% block content %}
-  <div class="text-center">
-    <h2 class="text-muted">All Professors</h2>
-  </div>
-  {% for professor_id, professor_info in professors.items %}
-    <div class="row my-5 align-items-center justify-content-center">
-      <div class="col-lg-8">
-        <div class="card" onclick="window.location='{% url 'view_professor' professor_id %}'" style="cursor: pointer;">
-          <div class="card-body text-center">{{ professor_info.name }} {{ professor_info.surname }}</div>
-        </div>
-      </div>
+
+  <div class="container-fluid d-flex flex-column align-items-center justify-content-center mb-5">
+    <div class="hero-content">
+      <h2>All Professors</h2>
     </div>
-  {% endfor %}
+    <div class="row g-4 justify-content-center w-100">
+        {% for professor_id, professor_info in professors.items %}
+            <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+                <a href="{% url 'view_professor' professor_info.pk %}" class="text-decoration-none w-100">
+                  <div class="card about-card text-center p-4">
+                      <img src="{{ professor_info.picture.url }}"
+                       class="rounded-circle card-coach-img mx-auto mb-3">
+                      <h5 class="card-title">{{professor_info.name}} {{professor_info.surname}}</h5>
+                  </div>
+                </a>
+            </div>
+        {% endfor%}
+    </div>
+  </div>
 {% endblock %}

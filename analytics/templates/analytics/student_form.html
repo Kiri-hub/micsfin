@@ -3,9 +3,38 @@
 {% block title %}Homepage - MICS{% endblock %}
 
 {% block content %}
-    <form method="POST">
+<section class="container-fluid mb-4">
+    <form method="POST" class="form-card  p-4">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        <button type="submit" class="btn btn-primary">{{ action }}</button>
+        <h1 class="mb-4 text-center form-title">{{ action }} Student</h1>
+        <div class="mb-3">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+        </div>
+        <div class="mb-3">
+            {{ form.surname.label_tag }}
+            {{ form.surname }}
+        </div>
+        <div class="mb-3">
+            {{ form.is_active.label_tag }}
+            {{ form.is_active }}
+        </div>
+        <div class="mb-3">
+            {{ form.professor.label_tag }}
+            {{ form.professor }}
+        </div>
+        <div class="mb-3">
+            {{ form.students_courses.label_tag }}
+            {{ form.students_courses }}
+        </div>
+        <div class="mb-3">
+            {{ form.notations.label_tag }}
+            {{ form.notations }}
+        </div>
+        <div class="d-grid">
+            <button type="submit" class="btn button-accent btn-lg">{{ action }}</button>
+        </div>
+
     </form>
+</section>
 {% endblock %}

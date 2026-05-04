@@ -3,41 +3,34 @@
 {% block title %}{{ student.name }} {{ student.surname}}{% endblock %}
 
 {% block content %}
-    <h1>{{ student.name }} {{ student.surname}}</h1>
-    <div class="row">
-        <div class="col-auto">
+    <div class="hero-content">
+        <h1>{{ student.name }} {{ student.surname}}</h1>
+        <a href="{% url 'view_professor' student.professor.id %}">
             <p>Викладач: {{student.professor}}</p>
-        </div>
-        <div class="col-auto">
-            <a href="{% url 'view_professor' student.professor.id %}">view</a>
-        </div>
-    </div>
-
-    <p>Курси студента:</p>
-    <ul class="list-group">
-        {% for course in courses %}
-            <li class="list-group-item">
-                {{ course }}{% if not forloop.last %}, {% endif %}
-            </li>
-        {% endfor%}
-    </ul>
-    <p>Нотатки:</p>
-    <p class="lead">{{student.notations}}</p>
-
-    </p>
-    <div class="row">
-        <div class="col-auto">
-            <form action="{% url 'delete_student' student.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this student?');">
-                {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-        </div>
-        <div class="col-auto">
-            <form action="{% url 'update_student' student.id %}" method="post" onsubmit="return confirm('Are you sure you want to edit this student?');">
-                {% csrf_token %}
-                <button class='btn btn-warning'>Update student</button>
-            </form>
+        </a>
+        <p>Курси студента:</p>
+        <ul class="list-group mb-4">
+            {% for course in courses %}
+                <li class="list-group-item">
+                    {{ course }}{% if not forloop.last %}, {% endif %}
+                </li>
+            {% endfor%}
+        </ul>
+        <p>Нотатки:</p>
+        <p class="lead">{{student.notations}}</p>
+        <div class="row">
+            <div class="col-auto">
+                <form action="{% url 'delete_student' student.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this student?');">
+                    {% csrf_token %}
+                <button type="submit" class="btn button-danger">Delete</button>
+                </form>
+            </div>
+            <div class="col-auto">
+                <form action="{% url 'update_student' student.id %}" method="post" onsubmit="return confirm('Are you sure you want to edit this student?');">
+                    {% csrf_token %}
+                    <button class='btn button-accent'>Update student</button>
+                </form>
+            </div>
         </div>
     </div>
-
 {% endblock %}
