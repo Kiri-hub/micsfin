@@ -149,7 +149,9 @@ def update_student(request, pk):
 
 
 def delete_student(request, pk):
-    return render(request, 'analytics/homepage.html')
+    student = get_object_or_404(Student, pk=pk)
+    student.delete()
+    return redirect(reverse("homepage"))
 
 
 def create_professor(request):
