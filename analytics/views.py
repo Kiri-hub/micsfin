@@ -1,10 +1,87 @@
+import openpyxl
+from openpyxl.styles import Font
+
+
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
+
+from datetime import datetime
 
 
 from .models import Student, Professor
 from .forms import ProfessorForm, StudentForm
 
 
+def build_response(workbook):
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+    filename = f"Учні_Мікс_{datetime.now().strftime('%Y-%m-%d')}.xlsx"
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+
+    workbook.save(response)
+    return response
+
+
+def export_students_excel(request):
+    students = Student.objects.select_related("professor").prefetch_related("students_courses")
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Students"
+
+    write_headers(ws)
+    write_students(ws, students)
+    format_worksheet(ws)
+
+    return build_response(wb)
+
+
+def write_headers(ws):
+    headers = [
+        "Name", "Surname", "Active", "Professor",
+        "Courses", "Total Income", "School Profit",
+        "Professor Rate", "Notations",
+    ]
+    ws.append(headers)
+
+    for cell in ws[1]:
+        cell.font = Font(bold=True)
+
+
+def write_students(ws, students):
+    for student in students:
+        courses = ", ".join(c.course_name for c in student.students_courses.all())
+
+        ws.append([
+            student.name,
+            student.surname,
+            "Yes" if student.is_active else "No",
+            str(student.professor) if student.professor else "",
+            courses,
+            student.get_total_income_from_student(),
+            student.get_total_school_rate_from_student(),
+            student.get_total_professore_rate_from_student(),
+            student.notations,
+        ])
+
+
+def format_worksheet(ws):
+    for column in ws.columns:
+        max_length = 0
+        col_letter = column[0].column_letter
+
+        for cell in column:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+
+        ws.column_dimensions[col_letter].width = max_length + 2
+
+
+@login_required
 def homepage(request):
     students_qs = Student.objects.order_by("id")
     students_dict = {}
@@ -22,6 +99,7 @@ def homepage(request):
     return render(request, 'analytics/homepage.html', {'students': students_dict})
 
 
+@login_required
 def view_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     courses = student.students_courses.all()
@@ -39,6 +117,7 @@ def view_student(request, pk):
     )
 
 
+@login_required
 def view_professors(request):
     professors_qs = Professor.objects.all()
     professors_dict = {}
@@ -54,6 +133,7 @@ def view_professors(request):
     return render(request, 'analytics/view_professors.html', {"professors": professors_dict})
 
 
+@login_required
 def view_professor(request, pk):
     professor = get_object_or_404(Professor, pk=pk)
 
@@ -98,6 +178,7 @@ def view_professor(request, pk):
     )
 
 
+@login_required
 def view_school_profit(request):
     professors = Professor.get_all_professors()
     professors_dict = {}
@@ -128,6 +209,7 @@ def view_school_profit(request):
     return render(request, 'analytics/view_school_profit.html', context)
 
 
+@login_required
 def create_student(request):
     if request.method == "POST":
         form = StudentForm(request.POST)
@@ -137,6 +219,8 @@ def create_student(request):
     form = StudentForm()
     return render(request, 'analytics/student_form.html', {"form": form, "action": "Create"})
 
+
+@login_required
 def update_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == "POST":
@@ -148,12 +232,14 @@ def update_student(request, pk):
     return render(request, 'analytics/student_form.html', {"form": form, "action": "Update"})
 
 
+@login_required
 def delete_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     student.delete()
     return redirect(reverse("homepage"))
 
 
+@login_required
 def create_professor(request):
     if request.method == 'POST':
         form = ProfessorForm(request.POST, request.FILES)
@@ -162,8 +248,3 @@ def create_professor(request):
             return redirect(reverse('homepage'))
     form = ProfessorForm()
     return render(request, 'analytics/professor_form.html', {'form': form})
-
-
-
-def export_students_excel(request):
-    return render(request, 'analytics/homepage.html')

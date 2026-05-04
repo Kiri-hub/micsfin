@@ -1,0 +1,9 @@
+{% extends "analytics/base.html" %}
+{% load bootstrap5 %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+{% endblock %}
