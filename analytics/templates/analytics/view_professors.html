@@ -1,5 +1,18 @@
-{% for professor in professors.values %}
-    <p>
-        {{ professor.name }} {{ professor.surname }}
-    </p>
-{% endfor %}
+{% extends "students/base.html" %}
+
+{% block title %}Homepage - MICS{% endblock %}
+
+{% block content %}
+  <div class="text-center">
+    <h2 class="text-muted">All Professors</h2>
+  </div>
+  {% for professor_id, professor_info in professors.items %}
+    <div class="row my-5 align-items-center justify-content-center">
+      <div class="col-lg-8">
+        <div class="card" onclick="window.location='{% url 'view_professor' professor_id %}'" style="cursor: pointer;">
+          <div class="card-body text-center">{{ professor_info.name }} {{ professor_info.surname }}</div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
