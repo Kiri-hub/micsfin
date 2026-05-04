@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "students/base.html" %}
+{% load bootstrap5 %}
+{% block title %}Homepage - MICS{% endblock %}
 
-</body>
-</html>
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}
