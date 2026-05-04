@@ -142,7 +142,7 @@ def delete_student(request, pk):
 
 def create_professor(request):
     if request.method == 'POST':
-        form = ProfessorForm(request.POST)
+        form = ProfessorForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect(reverse('homepage'))
