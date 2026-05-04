@@ -19,12 +19,14 @@ from django.urls import path, include
 from django.conf.urls.static import static
 
 
+
 from . import settings
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('analytics.urls'))
+    path("accounts/", include("django.contrib.auth.urls")),
+    path('', include('analytics.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

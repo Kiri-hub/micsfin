@@ -3,6 +3,7 @@ from openpyxl.styles import Font
 
 
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 
@@ -80,7 +81,7 @@ def format_worksheet(ws):
         ws.column_dimensions[col_letter].width = max_length + 2
 
 
-
+@login_required
 def homepage(request):
     students_qs = Student.objects.order_by("id")
     students_dict = {}
@@ -98,6 +99,7 @@ def homepage(request):
     return render(request, 'analytics/homepage.html', {'students': students_dict})
 
 
+@login_required
 def view_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     courses = student.students_courses.all()
@@ -115,6 +117,7 @@ def view_student(request, pk):
     )
 
 
+@login_required
 def view_professors(request):
     professors_qs = Professor.objects.all()
     professors_dict = {}
@@ -130,6 +133,7 @@ def view_professors(request):
     return render(request, 'analytics/view_professors.html', {"professors": professors_dict})
 
 
+@login_required
 def view_professor(request, pk):
     professor = get_object_or_404(Professor, pk=pk)
 
@@ -174,6 +178,7 @@ def view_professor(request, pk):
     )
 
 
+@login_required
 def view_school_profit(request):
     professors = Professor.get_all_professors()
     professors_dict = {}
@@ -204,6 +209,7 @@ def view_school_profit(request):
     return render(request, 'analytics/view_school_profit.html', context)
 
 
+@login_required
 def create_student(request):
     if request.method == "POST":
         form = StudentForm(request.POST)
@@ -213,6 +219,8 @@ def create_student(request):
     form = StudentForm()
     return render(request, 'analytics/student_form.html', {"form": form, "action": "Create"})
 
+
+@login_required
 def update_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == "POST":
@@ -224,12 +232,14 @@ def update_student(request, pk):
     return render(request, 'analytics/student_form.html', {"form": form, "action": "Update"})
 
 
+@login_required
 def delete_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     student.delete()
     return redirect(reverse("homepage"))
 
 
+@login_required
 def create_professor(request):
     if request.method == 'POST':
         form = ProfessorForm(request.POST, request.FILES)
