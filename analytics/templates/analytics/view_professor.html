@@ -1,28 +1,28 @@
- {% extends "analytics/base.html" %}
+{% extends "analytics/base.html" %}
 
 {% block title %}Homepage - MICS{% endblock %}
 
 {% block content %}
-    <div class="text-center">
-        <h2 class="text-muted">Professor`s BIO</h2>
+    <div class="text-center hero-content">
+        <h2>Professor info</h2>
     </div>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center hero-content">
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card">
-              <img src="{{professor.professor_picture}}" class="card-img-top">
+            <div class="card about-card">
+              <img src="{{ professor.professor_picture.url }}" class="card-img-top">
               <div class="card-body">
                     <h2>{{professor.name}} {{professor.surname}}</h2>
                     <p>Amount of student: {{ professor.professor_students_num }}</p>
-                    <a href="#students" class="btn btn-primary">See students</a>
-                    <a href="#stats" class="btn btn-primary">See statistics</a>
+                    <a href="#students" class="btn button-accent">See students</a>
+                    <a href="#stats" class="btn button-accent">See statistics</a>
               </div>
             </div>
         </div>
     </div>
-    <div class="text-center mt-5" id="students">
-        <h2 class="text-muted">Professor`s students</h2>
+    <div class="text-center mt-5 hero-content" id="students">
+        <h2>Professor`s students</h2>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive hero-content">
         <table class="table table-hover table-responsive">
           <thead>
             <tr>
@@ -51,10 +51,10 @@
         </tbody>
       </table>
     </div>
-    <div class="text-center mt-5" id="stats">
-        <h2 class="text-muted">Professor`s statistics</h2>
+    <div class="text-center mt-5 hero-content" id="stats">
+        <h2>Professor`s stats</h2>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive hero-content">
         <table class="table table-hover">
           <thead>
             <tr>
@@ -80,7 +80,7 @@
             {% endfor %}
         </tbody>
         <tfoot>
-            <tr class="table-info">
+            <tr>
                 <td colspan="3">Total: </td>
                 <td>{{ professor.total_income }}</td>
                 <td>{{ professor.professor_rate }}</td>

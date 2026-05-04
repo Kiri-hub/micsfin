@@ -1,0 +1,304 @@
+.hero-section {
+    background: linear-gradient(135deg, #ede9fe, #fdf4ff);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.custom-navbar {
+    background: linear-gradient(135deg, #0f0c29, #1e1b4b, #312e81);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.nav-link.active {
+    color: #ffc107 !important;
+}
+
+.custom-navbar .nav-link:hover {
+    color: #ffc107 !important;
+}
+
+.custom-navbar .navbar-brand:hover {
+    color: #ffc107 !important;
+}
+
+.hero_text {
+    position: relative;
+    z-index: 1;
+    margin-right: 80px;
+    margin-left: 80px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+.gradient-text .hero-content h1 {
+    color: #fff;
+    text-shadow:
+        0 1px 4px rgba(0,0,0,0.5),
+        0 0 4px rgba(255,255,255,0.25);
+}
+
+@media (max-width: 768px) {
+    .hero-content .h2 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 36px;
+    }
+
+    .hero-content p {
+        font-size: 16px;
+    }
+}
+
+.form-card {
+    max-width: 500px;
+    margin: auto;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(14px);
+
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.form-title {
+    color: white;
+    font-weight: 700;
+}
+
+.form-card textarea,
+.form-card select,
+.form-card input {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.form-card textarea::placeholder,
+.form-card select::placeholder,
+.form-card input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+.form-card textarea:focus,
+.form-card select:focus,
+.form-card input:focus {
+    background: rgba(255,255,255,0.5);
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 2px rgba(139,92,246,0.3);
+    outline: none;
+    color: black;
+}
+
+
+.form-card label {
+    color: rgba(255,255,255,0.85);
+}
+
+.custom-check input {
+    accent-color: #8b5cf6;
+}
+
+.accordion-item {
+    background: rgba(255,255,255,0.05);
+    border: none;
+    margin-bottom: 10px;
+}
+
+.accordion-button {
+    background: transparent;
+    color: white;
+}
+
+.accordion-button:not(.collapsed) {
+    background: rgba(255,255,255,0.08);
+    color: white;
+}
+
+.accordion-body {
+    color: rgba(255,255,255,0.8);
+}
+
+.about-section {
+    color: white;
+}
+
+.coach-img {
+    border: 3px solid rgba(255,255,255,0.1);
+}
+
+.yellow_text {
+    color: #f59e0b;
+}
+
+@media (max-width: 768px) {
+    .hero_text {
+        margin: 0 16px;
+    }
+}
+
+html, body {
+    overflow-x: hidden;
+}
+
+.hero-content p {
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+.hero-content h1 {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.hero-content p {
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+.hero-list li {
+    margin-bottom: 12px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+}
+
+.hero-list i {
+    margin-right: 10px;
+    color: #ffc107;
+}
+
+.hero-content h2 {
+    font-size: 24px;
+}
+
+
+.hero-content a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+}
+
+.hero-content a:hover {
+    color: #f59e0b;
+}
+
+.hero-content th {
+    font-size: 20px;
+    opacity: 0.9;
+    color: white
+}
+
+.hero-content td {
+    font-size: 20px;
+    opacity: 0.9;
+    color: white;
+}
+
+.hero-content tbody tr{
+    cursor: pointer;
+}
+
+.hero-content tbody tr:hover {
+    transition: all 0.25s ease;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+    background-color: #ffc107 !important;
+    color: black !important;
+}
+
+.hero-content tbody tr:hover td,
+.hero-content tbody tr:hover th {
+    color: black !important;
+}
+
+.table th,
+.table td {
+    border-bottom: 1px solid black;
+}
+
+.about-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    color: white;
+    width: 100%;
+}
+
+.about-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255,255,255,0.08);
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+.card-text {
+    opacity: 0.8;
+}
+
+.card-coach-img {
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+
+html, body {
+    background: linear-gradient(135deg, #0f0c29, #1e1b4b, #312e81);
+    height: 100%;
+    color: white;
+}
+
+.button-accent {
+    background: #f59e0b;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+}
+
+.button-accent:hover {
+    background: #d97706;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+}
+
+.button-accent:active {
+    transform: scale(0.97);
+}
+
+.button-danger {
+    background: red;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.button-danger:hover {
+    background: red;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.5);
+}
+
+.button-danger:active {
+    transform: scale(0.97);
+}
