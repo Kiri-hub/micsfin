@@ -1,14 +1,92 @@
-<h2>{{ professor.name }} {{ professor.surname }}</h2>
+{% extends "students/base.html" %}
 
-<p>Total income: {{ professor.total_income }}</p>
-<p>Professor rate: {{ professor.professor_rate }}</p>
-<p>School profit: {{ professor.school_rate }}</p>
+{% block title %}Homepage - MICS{% endblock %}
 
-<h3>Students:</h3>
-
-{% for student in students.values %}
-    <p>
-        {{ student.name }} {{ student.surname }} —
-        {{ student.total_income_from_student }}
-    </p>
-{% endfor %}
+{% block content %}
+    <div class="text-center">
+        <h2 class="text-muted">Professor`s BIO</h2>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card">
+              <img src="{{ professor.professor_picture.url }}" class="card-img-top">
+              <div class="card-body">
+                    <h2>{{professor.name}} {{professor.surname}}</h2>
+                    <p>Amount of student: {{ professor.professor_students_num }}</p>
+                    <a href="#students" class="btn btn-primary">See students</a>
+                    <a href="#stats" class="btn btn-primary">See statistics</a>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-5" id="students">
+        <h2 class="text-muted">Professor`s students</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-responsive">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Course</th>
+              <th scope="col">Professor</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+        <tbody>
+            {% for student_id, student_info in students.items %}
+                  <tr onclick="window.location='{% url 'view_student' student_id %}'" style="cursor: pointer;">
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ student_info.name }}</td>
+                      <td>{{ student_info.surname }}</td>
+                      <td>{% for course in student_info.courses %}
+                            {{ course }}{% if not forloop.last %}, {% endif %}
+                          {% endfor%}
+                      </td>
+                      <td>{{ student_info.professor }}</td>
+                      <td>{{ student_info.status }}</td>
+                  </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center mt-5" id="stats">
+        <h2 class="text-muted">Professor`s statistics</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Total</th>
+              <th scope="col">Professor`s Rate</th>
+              <th scope="col">Schools`s Rate</th>
+            </tr>
+          </thead>
+        <tbody>
+            {% for student_id, student_info in students.items %}
+                  <tr onclick="window.location='{% url 'view_student' student_id %}'" style="cursor: pointer;">
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ student_info.name }}</td>
+                      <td>{{ student_info.surname }}</td>
+                      <td>{{ student_info.total_income_from_student }}
+                      </td>
+                      <td>{{ student_info.professor_rate_from_student }}</td>
+                      <td>{{ student_info.school_rate_from_student }}</td>
+                  </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="table-info">
+                <td colspan="3">Total: </td>
+                <td>{{ professor.total_income }}</td>
+                <td>{{ professor.professor_rate }}</td>
+                <td>{{ professor.school_rate }}</td>
+            </tr>
+        </tfoot>
+      </table>
+    </div>
+{% endblock %}
