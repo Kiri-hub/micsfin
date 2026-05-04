@@ -1,13 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <p>
-        {{ professors }}
-        {{ students }}
-    </p>
-</body>
-</html>
+{% extends "analytics/base.html" %}
+
+{% block title %}Homepage - MICS{% endblock %}
+
+{% block content %}
+    <div class="text-center mt-5">
+        <h2 class="text-muted">School`s statistics</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Total</th>
+              <th scope="col">Professor`s Rate</th>
+              <th scope="col">Schools`s Rate</th>
+              <th scope="col">Amount of Student</th>
+            </tr>
+          </thead>
+        <tbody>
+            {% for professor_id, professor_info in professors.items %}
+                  <tr onclick="window.location='{% url 'view_professor' professor_id %}'" style="cursor: pointer;">
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ professor_info.name }}</td>
+                      <td>{{ professor_info.surname }}</td>
+                      <td>{{ professor_info.total_income }}</td>
+                      <td>{{ professor_info.professor_rate }}</td>
+                      <td>{{ professor_info.school_rate }}</td>
+                      <td>{{ professor_info.professor_students_num }}</td>
+                  </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="table-info">
+                <td colspan="3">Total: </td>
+                <td>{{ total_income }}</td>
+                <td>{{ total_professors_rate }}</td>
+                <td>{{ total_school_rate }}</td>
+                <td>{{ all_students }}</td>
+            </tr>
+        </tfoot>
+      </table>
+    </div>
+{% endblock %}

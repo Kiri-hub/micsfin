@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {{ students }}
-</body>
-</html>
+{% extends "analytics/base.html" %}
+
+{% block title %}Homepage - MICS{% endblock %}
+
+{% block content %}
+    <div class="text-center mt-5">
+        <h2 class="text-muted">All Students</h2>
+    </div>
+      <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Course</th>
+              <th scope="col">Professor</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+        <tbody>
+            {% for student_id, student_info in students.items %}
+                  <tr onclick="window.location='{% url 'view_student' student_id %}'" style="cursor: pointer;">
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ student_info.name }}</td>
+                      <td>{{ student_info.surname }}</td>
+                      <td>{% for course in student_info.courses %}
+                            {{ course }}{% if not forloop.last %}, {% endif %}
+                          {% endfor%}
+                      </td>
+                      <td>{{ student_info.professor }}</td>
+                      <td>{{ student_info.status }}</td>
+                  </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}
