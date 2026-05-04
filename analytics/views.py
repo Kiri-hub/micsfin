@@ -129,8 +129,13 @@ def view_school_profit(request):
 
 
 def create_student(request):
-    return render(request, 'analytics/student_form.html')
-
+    if request.method == "POST":
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse("homepage"))
+    form = StudentForm()
+    return render(request, 'analytics/student_form.html', {"form": form, "action": "Create"})
 
 def update_student(request, pk):
     return render(request, 'analytics/student_form.html')
