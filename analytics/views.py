@@ -67,7 +67,7 @@ def view_professor(request, pk):
         "school_rate": school_rate,
         "professor_students": professor_students,
         "professor_students_num": len(professor_students),
-        "professor_picture": professor.picture,
+        "professor_picture": professor.picture.url,
     }
 
     students = {}
