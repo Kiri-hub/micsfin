@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -6,9 +7,27 @@ from .models import Student, Professor, ChessCourse
 
 class PageTest(TestCase):
 
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='admin',
+            password='12345'
+        )
+
     def test_home_page_status(self):
         response = self.client.get(reverse('homepage'))
         self.assertEqual(response.status_code, 200)
+
+
+    def test_home_page_logged_in(self):
+        self.client.login(
+            username='admin',
+            password='12345'
+        )
+
+        response = self.client.get(reverse('homepage'))
+
+        self.assertEqual(response.status_code, 200)
+
 
     def test_total_school_rate(self):
         professor = Professor.objects.create(

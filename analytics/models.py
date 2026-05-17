@@ -128,7 +128,6 @@ class Student(models.Model):
             if course.per_lesson:
                 total_school_rate_from_student += course.get_school_rate() * course.lessons_in_month
             else:
-                #+= needed
                 total_school_rate_from_student += course.course_price - course.professor_rate
         return total_school_rate_from_student
 
