@@ -126,10 +126,10 @@ class Student(models.Model):
         total_school_rate_from_student = 0
         for course in self.students_courses.all():
             if course.per_lesson:
-                total_school_rate_from_student = course.get_school_rate() * course.lessons_in_month
+                total_school_rate_from_student += course.get_school_rate() * course.lessons_in_month
             else:
                 #+= needed
-                total_school_rate_from_student = course.course_price - course.professor_rate
+                total_school_rate_from_student += course.course_price - course.professor_rate
         return total_school_rate_from_student
 
 
