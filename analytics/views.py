@@ -1,20 +1,20 @@
 import openpyxl
 from openpyxl.styles import Font
 
-
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
-
 from datetime import datetime
-
 
 from .models import Student, Professor
 from .forms import ProfessorForm, StudentForm
 
 
 def build_response(workbook):
+    """
+    Build HTTP response with generated Excel workbook.
+    """
     response = HttpResponse(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
@@ -27,6 +27,9 @@ def build_response(workbook):
 
 
 def export_students_excel(request):
+    """
+    Export students data to Excel file.
+    """
     students = Student.objects.select_related("professor").prefetch_related("students_courses")
 
     wb = openpyxl.Workbook()
@@ -41,6 +44,9 @@ def export_students_excel(request):
 
 
 def write_headers(ws):
+    """
+    Write table headers to worksheet.
+    """
     headers = [
         "Name", "Surname", "Active", "Professor",
         "Courses", "Total Income", "School Profit",
@@ -53,6 +59,9 @@ def write_headers(ws):
 
 
 def write_students(ws, students):
+    """
+    Write students data into worksheet rows.
+    """
     for student in students:
         courses = ", ".join(c.course_name for c in student.students_courses.all())
 
@@ -70,6 +79,9 @@ def write_students(ws, students):
 
 
 def format_worksheet(ws):
+    """
+    Automatically adjust worksheet column widths.
+    """
     for column in ws.columns:
         max_length = 0
         col_letter = column[0].column_letter
@@ -83,6 +95,9 @@ def format_worksheet(ws):
 
 @login_required
 def homepage(request):
+    """
+    Display homepage with all students information.
+    """
     students_qs = Student.objects.order_by("id")
     students_dict = {}
 
@@ -101,6 +116,9 @@ def homepage(request):
 
 @login_required
 def view_student(request, pk):
+    """
+    Display detailed information about a student.
+    """
     student = get_object_or_404(Student, pk=pk)
     courses = student.students_courses.all()
 
@@ -119,6 +137,9 @@ def view_student(request, pk):
 
 @login_required
 def view_professors(request):
+    """
+    Display all professors.
+    """
     professors_qs = Professor.objects.all()
     professors_dict = {}
 
@@ -135,6 +156,9 @@ def view_professors(request):
 
 @login_required
 def view_professor(request, pk):
+    """
+    Display detailed information about a professor.
+    """
     professor = get_object_or_404(Professor, pk=pk)
 
     total_income = professor.get_professor_total_income()
@@ -180,6 +204,9 @@ def view_professor(request, pk):
 
 @login_required
 def view_school_profit(request):
+    """
+    Display school financial statistics and professors profits.
+    """
     professors = Professor.get_all_professors()
     professors_dict = {}
 
@@ -211,6 +238,9 @@ def view_school_profit(request):
 
 @login_required
 def create_student(request):
+    """
+    Create a new student.
+    """
     if request.method == "POST":
         form = StudentForm(request.POST)
         if form.is_valid():
@@ -222,6 +252,9 @@ def create_student(request):
 
 @login_required
 def update_student(request, pk):
+    """
+    Update existing student information.
+    """
     student = get_object_or_404(Student, pk=pk)
     if request.method == "POST":
         form = StudentForm(request.POST, instance=student)
@@ -234,6 +267,9 @@ def update_student(request, pk):
 
 @login_required
 def delete_student(request, pk):
+    """
+    Delete a student from the database.
+    """
     student = get_object_or_404(Student, pk=pk)
     student.delete()
     return redirect(reverse("homepage"))
@@ -241,6 +277,9 @@ def delete_student(request, pk):
 
 @login_required
 def create_professor(request):
+    """
+    Create a new professor.
+    """
     if request.method == 'POST':
         form = ProfessorForm(request.POST, request.FILES)
         if form.is_valid():
