@@ -1,20 +1,47 @@
+"""
+Views module for MicsFin analytics application.
+
+This module contains Django views responsible for:
+    * displaying students and professors information;
+    * calculating school financial statistics;
+    * exporting students data into Excel files;
+    * creating, updating and deleting entities.
+
+The module uses:
+    * Django function-based views;
+    * OpenPyXL for Excel generation;
+    * authentication decorators for access control.
+
+Author:
+    Haiduk Valerii
+
+Version:
+    1.0
+"""
+
 import openpyxl
 from openpyxl.styles import Font
-
 
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
-
 from datetime import datetime
-
 
 from .models import Student, Professor
 from .forms import ProfessorForm, StudentForm
 
 
 def build_response(workbook):
+    """
+    Build HTTP response with generated Excel workbook.
+
+    Args:
+        workbook (Workbook): OpenPyXL workbook object.
+
+    Returns:
+        HttpResponse: HTTP response containing generated Excel file.
+    """
     response = HttpResponse(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
@@ -27,6 +54,15 @@ def build_response(workbook):
 
 
 def export_students_excel(request):
+    """
+    Export students data into Excel file.
+
+    Args:
+        request (HttpRequest): User request object.
+
+    Returns:
+        HttpResponse: Excel file response with students data.
+    """
     students = Student.objects.select_related("professor").prefetch_related("students_courses")
 
     wb = openpyxl.Workbook()
@@ -41,6 +77,15 @@ def export_students_excel(request):
 
 
 def write_headers(ws):
+    """
+    Write table headers into worksheet.
+
+    Args:
+        ws (Worksheet): OpenPyXL worksheet object.
+
+    Returns:
+        None
+    """
     headers = [
         "Name", "Surname", "Active", "Professor",
         "Courses", "Total Income", "School Profit",
@@ -53,6 +98,16 @@ def write_headers(ws):
 
 
 def write_students(ws, students):
+    """
+    Write students information into worksheet rows.
+
+    Args:
+        ws (Worksheet): OpenPyXL worksheet object.
+        students (QuerySet): Collection of student objects.
+
+    Returns:
+        None
+    """
     for student in students:
         courses = ", ".join(c.course_name for c in student.students_courses.all())
 
@@ -70,6 +125,15 @@ def write_students(ws, students):
 
 
 def format_worksheet(ws):
+    """
+    Automatically adjust worksheet column widths.
+
+    Args:
+        ws (Worksheet): OpenPyXL worksheet object.
+
+    Returns:
+        None
+    """
     for column in ws.columns:
         max_length = 0
         col_letter = column[0].column_letter
@@ -83,6 +147,15 @@ def format_worksheet(ws):
 
 @login_required
 def homepage(request):
+    """
+    Display homepage with all students information.
+
+    Args:
+        request (HttpRequest): User request object.
+
+    Returns:
+        HttpResponse: Rendered homepage template.
+    """
     students_qs = Student.objects.order_by("id")
     students_dict = {}
 
@@ -101,6 +174,16 @@ def homepage(request):
 
 @login_required
 def view_student(request, pk):
+    """
+    Display detailed information about a student.
+
+    Args:
+        request (HttpRequest): User request object.
+        pk (int): Student primary key.
+
+    Returns:
+        HttpResponse: Rendered student details page.
+    """
     student = get_object_or_404(Student, pk=pk)
     courses = student.students_courses.all()
 
@@ -119,6 +202,15 @@ def view_student(request, pk):
 
 @login_required
 def view_professors(request):
+    """
+    Display all professors.
+
+    Args:
+        request (HttpRequest): User request object.
+
+    Returns:
+        HttpResponse: Rendered professors page.
+    """
     professors_qs = Professor.objects.all()
     professors_dict = {}
 
@@ -135,6 +227,16 @@ def view_professors(request):
 
 @login_required
 def view_professor(request, pk):
+    """
+    Display detailed information about a professor.
+
+    Args:
+        request (HttpRequest): User request object.
+        pk (int): Professor primary key.
+
+    Returns:
+        HttpResponse: Rendered professor details page.
+    """
     professor = get_object_or_404(Professor, pk=pk)
 
     total_income = professor.get_professor_total_income()
@@ -180,6 +282,15 @@ def view_professor(request, pk):
 
 @login_required
 def view_school_profit(request):
+    """
+    Display school financial statistics.
+
+    Args:
+        request (HttpRequest): User request object.
+
+    Returns:
+        HttpResponse: Rendered school profit page.
+    """
     professors = Professor.get_all_professors()
     professors_dict = {}
 
@@ -211,40 +322,108 @@ def view_school_profit(request):
 
 @login_required
 def create_student(request):
+    """
+    Create a new student.
+
+    Args:
+        request (HttpRequest): User request object.
+
+    Returns:
+        HttpResponse: Rendered student creation form or redirect response.
+    """
     if request.method == "POST":
         form = StudentForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect(reverse("homepage"))
+
     form = StudentForm()
-    return render(request, 'analytics/student_form.html', {"form": form, "action": "Create"})
+
+    return render(
+        request,
+        'analytics/student_form.html',
+        {
+            "form": form,
+            "action": "Create"
+        }
+    )
 
 
 @login_required
 def update_student(request, pk):
+    """
+    Update existing student information.
+
+    Args:
+        request (HttpRequest): User request object.
+        pk (int): Student primary key.
+
+    Returns:
+        HttpResponse: Rendered update form or redirect response.
+    """
     student = get_object_or_404(Student, pk=pk)
+
     if request.method == "POST":
         form = StudentForm(request.POST, instance=student)
+
         if form.is_valid():
             form.save()
             return redirect(reverse("homepage"))
+
     form = StudentForm(instance=student)
-    return render(request, 'analytics/student_form.html', {"form": form, "action": "Update"})
+
+    return render(
+        request,
+        'analytics/student_form.html',
+        {
+            "form": form,
+            "action": "Update"
+        }
+    )
 
 
 @login_required
 def delete_student(request, pk):
+    """
+    Delete student from database.
+
+    Args:
+        request (HttpRequest): User request object.
+        pk (int): Student primary key.
+
+    Returns:
+        HttpResponseRedirect: Redirect response to homepage.
+    """
     student = get_object_or_404(Student, pk=pk)
     student.delete()
+
     return redirect(reverse("homepage"))
 
 
 @login_required
 def create_professor(request):
+    """
+    Create a new professor.
+
+    Args:
+        request (HttpRequest): User request object.
+
+    Returns:
+        HttpResponse: Rendered professor form or redirect response.
+    """
     if request.method == 'POST':
         form = ProfessorForm(request.POST, request.FILES)
+
         if form.is_valid():
             form.save()
             return redirect(reverse('homepage'))
+
     form = ProfessorForm()
-    return render(request, 'analytics/professor_form.html', {'form': form})
+
+    return render(
+        request,
+        'analytics/professor_form.html',
+        {
+            'form': form
+        }
+    )
